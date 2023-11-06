@@ -20,6 +20,7 @@ import (
 //	}
 func init() {
 	functions.HTTP("PartialUpdateEmployee", PartialUpdateEmployee)
+
 }
 
 func PartialUpdateEmployee(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +35,14 @@ func PartialUpdateEmployee(w http.ResponseWriter, r *http.Request) {
 
 	// Create a logger for this function.
 	logger := logClient.Logger("my-log")
+	if id == "" {
+		http.Error(w, "Employee ID is required", http.StatusBadRequest)
+		logger.Log(logging.Entry{
+			Payload:  "Employee ID is required",
+			Severity: logging.Error,
+		})
+		return
+	}
 
 	// Parse request body to get partial employee data
 	var partialEmp map[string]interface{}
@@ -76,14 +85,7 @@ func PartialUpdateEmployee(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if the employee ID is provided and valid
-	if id == "" {
-		http.Error(w, "Employee ID is required", http.StatusBadRequest)
-		logger.Log(logging.Entry{
-			Payload:  "Employee ID is required",
-			Severity: logging.Error,
-		})
-		return
-	}
+
 	if partialEmpPassword, ok := partialEmp["Password"].(string); ok {
 		if partialEmpPassword == "" {
 			http.Error(w, "Password cannot be empty", http.StatusBadRequest)
