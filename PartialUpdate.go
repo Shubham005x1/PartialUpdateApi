@@ -24,6 +24,7 @@ func init() {
 }
 
 func PartialUpdateEmployee(w http.ResponseWriter, r *http.Request) {
+
 	ctx := context.Background()
 	initializeFirestore()
 	// Get employee ID from the URL path
@@ -35,6 +36,10 @@ func PartialUpdateEmployee(w http.ResponseWriter, r *http.Request) {
 
 	// Create a logger for this function.
 	logger := logClient.Logger("my-log")
+	logger.Log(logging.Entry{
+		Payload:  " Update method started",
+		Severity: logging.Info,
+	})
 	if id == "" {
 		http.Error(w, "Employee ID is required", http.StatusBadRequest)
 		logger.Log(logging.Entry{
