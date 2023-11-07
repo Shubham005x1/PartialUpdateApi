@@ -41,6 +41,7 @@ func initializeFirestore() {
 
 // Function to merge two maps
 func mergeMap(destination, source map[string]interface{}) map[string]interface{} {
+	fmt.Printf("merging map")
 	for key, value := range source {
 		if _, ok := destination[key]; !ok {
 			// Key doesn't exist in destination map, you can handle it here
